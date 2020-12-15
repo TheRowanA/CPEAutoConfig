@@ -1,2 +1,1 @@
-# CPEAutoConfig
-AHK Script that auto configures CPE Equipment
+# CPEAutoConfig<br>AHK Script that auto configures CPE Equipment<br><br>The script can be terminated by pressing the ESC key at any time.<br><br>Before running make sure that TELNET is allowed in your windows firewall.<br>This script utilizes the Chrome Debug API for web browser interfacing. Make sure the latest version of Chrome is installed.<br>The script will generate its own chrome profile. Due to this i recommended running this script within its own folder.<br>
