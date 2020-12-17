@@ -14,7 +14,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
 ; Sets Compiler options
 
-version := "0.2.5", company := "HISP"
+version := "0.2.5a", company := "HISP"
 
 ;@Ahk2Exe-Let version = %A_PriorLine~U)^(.+"){1}(.+)".*$~$2%
 
@@ -208,6 +208,47 @@ else
 	ExitApp
 	return
 }
+
+PingCheck(url, timeout)
+{
+	pingLogFile := "ping.log"
+	Runwait, %A_ComSpec% /c ping -w %timeout% %url%>%pingLogFile%,, Hide
+	fileread , StrTemp, pingLogFile
+	if RegExMatch(StrTemp, "Received = (\d+)", received)
+	{
+		FileDelete, pingLogFile
+		return received
+	}
+	else
+	{
+		return 0
+	}
+}
+
+
+HTTPCheck(url, port)
+{
+	Run, telnet.exe %url% %port% -f %A_WorkingDir%\HTTPCheck.log,, , telnetPID
+	WinWait, ahk_pid %telnetPID%
+	Sleep, 2000
+	ControlSend,, {ENTER} {ENTER}, ahk_pid %telnetPID%
+	FileReadLine, StrTemp, %A_WorkingDir%\HTTPCheck.log, 1
+	if (StrTemp != "HTTP/1.1 400 Bad Request")
+	{
+		Sleep, 7000
+		WinClose, ahk_pid %telnetPID%
+		FileDelete, %A_WorkingDir%\HTTPCheck.log
+		return received
+	}
+	else
+	{
+		WinClose, ahk_pid %telnetPID%
+		FileDelete, %A_WorkingDir%\HTTPCheck.log
+		return "Connected"
+	}
+}
+
+
 
 
 Progress, off

@@ -6,6 +6,16 @@ EnableNetcommTELNET()
 		This is done by using DOM functions over http to scoure and tigger html and JavaScript Events.
 	*/
 	
+	while !(HTTPCheck("192.168.20.1", 80) = "Connected")
+	{
+		Sleep, 2000
+		if (HTTPCheck("192.168.20.1", 80) = "Connected")
+		{
+			Break
+		}
+	}
+	Sleep, 4000
+	
 	global ChromeInst := new Chrome("ChromeProfile",, "-headless")
 	global PageInst := ChromeInst.GetPage()
 	PageInst.Call("Network.enable")
@@ -47,7 +57,3 @@ EnableNetcommTELNET()
 	return
 }
 
-
-NetcommTelnet(){
-	
-}
